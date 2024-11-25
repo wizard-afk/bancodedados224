@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AulaEntityFramework.Models;
+using AulaEntityFramework.Repositores;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AulaEntityFramework.Controllers
 {
@@ -13,18 +15,27 @@ namespace AulaEntityFramework.Controllers
     {
         private readonly MyDbContext _context;
 
-        public PessoasController(MyDbContext context)
+        private IPessoaRepository _pessoaRepository;
+
+        public PessoasController(MyDbContext context, IPessoaRepository pessoaRepository)
         {
             _context = context;
+            _pessoaRepository = pessoaRepository;
         }
 
-        // GET: Pessoas
-        public async Task<IActionResult> Index()
+        [HttpGet]
+
+        public IActionResult Index(string bdt)
         {
-            return View(await _context.Pessoas.ToListAsync());
+            var repo = _pessoaRepository.GetAll();
+
+            if(!bdt.IsNullOrEmpty())
+                repo = _pessoaRepository.GetByBirthDate(Convert.ToDateTime(bdt));
+
+            return View(repo);
         }
 
-        // GET: Pessoas/Details/5
+        [HttpGet]
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
@@ -42,7 +53,7 @@ namespace AulaEntityFramework.Controllers
             return View(pessoa);
         }
 
-        // GET: Pessoas/Create
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -64,7 +75,7 @@ namespace AulaEntityFramework.Controllers
             return View(pessoa);
         }
 
-        // GET: Pessoas/Edit/5
+        [HttpGet]
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -115,7 +126,7 @@ namespace AulaEntityFramework.Controllers
             return View(pessoa);
         }
 
-        // GET: Pessoas/Delete/5
+        [HttpGet]
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
@@ -133,7 +144,6 @@ namespace AulaEntityFramework.Controllers
             return View(pessoa);
         }
 
-        // POST: Pessoas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)

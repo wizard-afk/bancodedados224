@@ -1,0 +1,77 @@
+﻿@model IEnumerable<CampeonatoOrganizado.Models.PartidaEquipeViewModel>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chaveamento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .chaveamento {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 50px;
+            margin-top: 20px;
+        }
+
+        .fase {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .partida {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .equipe {
+            width: 120px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .linha-vertical {
+            width: 2px;
+            height: 40px;
+            background-color: #ccc;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chaveamento</h1>
+
+    <div class="chaveamento">
+        @foreach (var fase in new[] { "Classificatorias", "Oitavas", "Quartas", "Semi", "Final" })
+        {
+            <div class="fase">
+                <h2>@fase</h2>
+                @foreach (var partida in Model.Where(p => p.Fase == fase && p.Resultado == null))
+                {
+                    <div class="partida">
+                        <div class="equipe">Equipe 1: @partida.IdEquipe1</div>
+                        <div class="linha-vertical"></div>
+                        <div class="equipe">
+                            @(partida.IdEquipe2.HasValue ? $"Equipe 2: {partida.IdEquipe2}" : "Equipe 2: N/A")
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</body>
+</html>

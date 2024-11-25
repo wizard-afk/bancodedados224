@@ -1,14 +1,22 @@
 using AulaEntityFramework.Models;
+using AulaEntityFramework.Repositores;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connString = builder.Configuration["AulaEntityFramework:ConnectionString"];
+var connString =
+    builder
+    .Configuration["AulaEntityFramework:ConnectionString"];
 
-//fazemos a configuração do DbContext com o banco de dados específico, neste caso o sql server
+// Fazemos a configuração do DbContext com
+// o banco de dados específico, neste caso
+// o SQLServer
 builder.Services.AddDbContext<MyDbContext>(
     o => o.UseSqlServer(connString)
 );
+
+//Registro dos serviços relacionados a camdad e acesso ao repositorio de dados
+builder.Services.AddScoped<IPessoaRepository, PessoaRepository>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -32,6 +40,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Pessoas}/{action=Index}/{id?}");
 
 app.Run();

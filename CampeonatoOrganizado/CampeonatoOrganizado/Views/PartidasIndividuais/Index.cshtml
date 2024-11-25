@@ -1,0 +1,52 @@
+﻿@model IEnumerable<CampeonatoOrganizado.Models.PartidaIndividualView>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Partidas Individuais</title>
+    <!-- Bootstrap para estilização -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Partidas Individuais</h1>
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Atleta 1</th>
+                    <th>Pontuação Atleta 1</th>
+                    <th>Atleta 2</th>
+                    <th>Pontuação Atleta 2</th>
+                    <th>Resultado</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var partida in Model)
+                {
+                    <tr>
+                        <td>@partida.nome_atleta1</td>
+                        <td>@partida.pontuacao_atleta1</td> <!-- Campo adicionado -->
+                        <td>@partida.nome_atleta2</td>
+                        <td>@partida.pontuacao_atleta2</td> <!-- Campo adicionado -->
+                        <td>@partida.resultado_partida</td>
+                        <td>
+                            <form asp-action="AtualizarResultado" method="post">
+                                <input type="hidden" name="idPartida" value="@partida.id_partida_individual" />
+                                <select class="form-select" name="resultado">
+                                    <option value="atleta1">Atleta 1 Venceu</option>
+                                    <option value="atleta2">Atleta 2 Venceu</option>
+                                    <option value="empate">Empate</option>
+                                    <option value="bye">Bye</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary mt-2">Atualizar</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
